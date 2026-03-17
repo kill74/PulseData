@@ -1,0 +1,11 @@
+order_id,customer_email,product_sku,quantity,unit_price,order_date,status
+EXT-001,ana.silva@email.com,ELEC-001,1,89.99,2024-03-01,delivered
+EXT-002,joao.ferreira@email.com,BOOK-001,2,42.00,2024-03-02,delivered
+EXT-003,maria.costa@email.com,HOME-003,1,39.99,2024-03-03,shipped
+EXT-004,carlos.mendes@email.com,SPRT-002,3,24.99,2024-03-04,delivered
+EXT-005,sophie.martin@email.com,ELEC-003,1,119.00,2024-03-05,confirmed
+EXT-006,thomas.müller@email.com,CLTH-001,2,19.99,2024-03-06,pending
+EXT-007,laura.rossi@email.com,BOOK-002,1,36.00,2024-03-07,delivered
+EXT-008,james.wilson@email.com,ELEC-002,1,34.99,2024-03-08,delivered
+EXT-009,sara.ahmed@email.com,SPRT-003,2,18.99,2024-03-09,shipped
+EXT-010,pedro.santos@email.com,HOME-001,1,129.99,2024-03-10,delivered

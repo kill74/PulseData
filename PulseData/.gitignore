@@ -1,0 +1,42 @@
+## .NET / C#
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.swp
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+## NuGet
+*.nupkg
+*.snupkg
+.nuget/packages/
+packages/
+!**/packages/repositories.config
+
+## Logs
+*.log
+logs/
+
+## Environment
+.env
+.env.local
+.env.*.local
+appsettings.Development.json
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Rider / JetBrains
+.idea/
+*.iml
+
+## Test results
+TestResults/
+coverage/
