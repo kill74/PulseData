@@ -35,7 +35,7 @@ public class OrderEtlPipeline
         _logger = logger;
     }
 
-    public async Task<EtlResult> RunAsync(string csvFilePath)
+    public async Task<EtlResult> RunAsync(string csvFilePath, CancellationToken cancellationToken = default)
     {
         var result = new EtlResult();
         var startTime = DateTime.UtcNow;
@@ -45,12 +45,14 @@ public class OrderEtlPipeline
         try
         {
             // Extract
+            cancellationToken.ThrowIfCancellationRequested();
             _logger.LogInformation("Extracting records from CSV...");
             var rawRecords = Extract(csvFilePath);
             result.RecordsRead = rawRecords.Count;
             _logger.LogInformation("Extracted {RecordCount} records", rawRecords.Count);
 
             // Transform & Validate
+            cancellationToken.ThrowIfCancellationRequested();
             _logger.LogInformation("Transforming and validating records...");
             var (cleanRecords, transformErrors) = Transform(rawRecords);
             result.RecordsFailed = transformErrors.Count;
@@ -69,6 +71,7 @@ public class OrderEtlPipeline
             // Load into Database
             if (cleanRecords.Count > 0)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 _logger.LogInformation("Loading {RecordCount} orders into database...", cleanRecords.Count);
                 var (loaded, loadErrors) = await LoadAsync(cleanRecords);
 
