@@ -6,7 +6,7 @@ A full-stack data engineering project built with **C# / .NET 8**, **PostgreSQL**
 
 ---
 
-## ✨ What It Does
+## What It Does
 
 PulseData ingests raw sales data, stores it in a normalized relational database, and exposes a REST API with analytics endpoints — things like top-selling products, customer lifetime value, and monthly revenue trends.
 
@@ -14,14 +14,14 @@ The idea is to mirror what a junior data/backend engineer would actually work on
 
 ### Key Features
 
-- 📊 **Real-time Analytics** — Revenue summaries, top products, customer metrics
-- 🔄 **ETL Pipeline** — Automated data extraction, transformation, and loading from CSV
-- 🏥 **Health Checks** — Built-in service health monitoring and status endpoints
-- 📝 **Structured Logging** — Serilog integration for comprehensive application insights
-- 🛡️ **Error Handling** — Global exception middleware with proper error responses
-- 🐳 **Containerization** — Docker & Docker Compose for multi-environment deployments
-- 📚 **Clean Architecture** — Separation of concerns with Core, Infrastructure, and API layers
-- ⚡ **Optimized Queries** — Dapper with raw SQL for performance-critical operations
+- **Real-time Analytics** — Revenue summaries, top products, customer metrics
+- **ETL Pipeline** — Automated data extraction, transformation, and loading from CSV
+- **Health Checks** — Built-in service health monitoring and status endpoints
+- **Structured Logging** — Serilog integration for comprehensive application insights
+- **Error Handling** — Global exception middleware with proper error responses
+- **Containerization** — Docker & Docker Compose for multi-environment deployments
+- **Clean Architecture** — Separation of concerns with Core, Infrastructure, and API layers
+- **Optimized Queries** — Dapper with raw SQL for performance-critical operations
 
 ```
 Raw CSV / API data
@@ -222,7 +222,7 @@ dotnet run
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 - **[QUICK_START.md](QUICK_START.md)** — Quick reference with commands and troubleshooting
 - **[DOCKER.md](DOCKER.md)** — Complete Docker & Docker Compose setup guide, production deployment
@@ -231,14 +231,14 @@ dotnet run
 
 ## API Endpoints
 
-### 🏥 Health & Status
+### Health & Status
 
 | Method | Endpoint            | Description                                  |
 | ------ | ------------------- | -------------------------------------------- |
 | GET    | `/api/health/live`  | Liveness check (is API running?)             |
 | GET    | `/api/health/ready` | Readiness check (is API ready for requests?) |
 
-### 📊 Analytics
+### Analytics
 
 | Method | Endpoint                               | Description                             |
 | ------ | -------------------------------------- | --------------------------------------- |
@@ -247,7 +247,7 @@ dotnet run
 | GET    | `/api/analytics/customer-stats`        | Customer metrics (LTV, churn, averages) |
 | GET    | `/api/analytics/monthly-trends`        | Month-over-month growth trends          |
 
-### 📦 Orders
+### Orders
 
 | Method | Endpoint                               | Description                         |
 | ------ | -------------------------------------- | ----------------------------------- |
@@ -255,7 +255,7 @@ dotnet run
 | GET    | `/api/orders/{id}`                     | Order detail with line items        |
 | GET    | `/api/orders/by-customer/{customerId}` | Customer order history              |
 
-### 🛍️ Products & Customers
+### Products & Customers
 
 | Method | Endpoint                                 | Description                   |
 | ------ | ---------------------------------------- | ----------------------------- |
@@ -375,14 +375,14 @@ PulseData follows clean architecture principles with clear separation of concern
 
 ### Key Improvements
 
-✅ **Global Exception Middleware** — Consistent error handling across all endpoints
-✅ **Structured Logging** — Serilog for rich contextual logs
-✅ **CORS & Security** — Configured cross-origin policies
-✅ **Health Checks** — Liveness and readiness endpoints for orchestration
-✅ **Batch Optimization** — Optimized ETL with efficient database insertion
-✅ **Dependency Injection** — Proper IoC using Microsoft.Extensions
-✅ **Status Enums** — Type-safe order status handling
-✅ **Connection Pooling** — Optimized database connections
+- **Global Exception Middleware** — Consistent error handling across all endpoints
+- **Structured Logging** — Serilog for rich contextual logs
+- **CORS & Security** — Configured cross-origin policies
+- **Health Checks** — Liveness and readiness endpoints for orchestration
+- **Batch Optimization** — Optimized ETL with efficient database insertion
+- **Dependency Injection** — Proper IoC using Microsoft.Extensions
+- **Status Enums** — Type-safe order status handling
+- **Connection Pooling** — Optimized database connections
 
 ---
 

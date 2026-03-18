@@ -36,30 +36,30 @@ help:
 # Basic operations
 docker-up:
 	docker-compose up -d
-	@echo "✓ Services started: PostgreSQL, pgAdmin"
+	@echo "Services started: PostgreSQL, pgAdmin"
 	@echo "  - PostgreSQL: localhost:5432"
 	@echo "  - pgAdmin: http://localhost:8080"
 
 docker-up-full:
 	docker-compose --profile with-api up -d
-	@echo "✓ Full stack started: PostgreSQL, pgAdmin, API"
+	@echo "Full stack started: PostgreSQL, pgAdmin, API"
 	@echo "  - PostgreSQL: localhost:5432"
 	@echo "  - pgAdmin: http://localhost:8080"
 	@echo "  - API: http://localhost:8000"
 
 docker-down:
 	docker-compose down
-	@echo "✓ All services stopped"
+	@echo "All services stopped"
 
 docker-restart:
 	docker-compose restart
-	@echo "✓ Services restarted"
+	@echo "Services restarted"
 
 docker-ps:
 	docker-compose ps
 
 docker-compose-validate:
-	docker-compose config > /dev/null && echo "✓ docker-compose.yml is valid"
+	docker-compose config > /dev/null && echo "docker-compose.yml is valid"
 
 # Logs
 docker-logs:
@@ -93,17 +93,17 @@ db-exec:
 docker-rebuild:
 	docker-compose build api
 	docker-compose up -d
-	@echo "✓ API image rebuilt and services restarted"
+	@echo "API image rebuilt and services restarted"
 
 # Clean operations
 docker-clean:
 	docker-compose down -v
-	@echo "⚠️  All containers removed and volumes cleaned (database data cleared)"
+	@echo "All containers removed and volumes cleaned (database data cleared)"
 
 docker-clean-images:
 	docker-compose down -v --remove-orphans
 	docker rmi pulsedata-api:latest 2>/dev/null || true
-	@echo "✓ Containers, volumes, and images cleaned"
+	@echo "Containers, volumes, and images cleaned"
 
 # Additional utilities
 health-check:
@@ -113,7 +113,7 @@ health-check:
 backup-db:
 	@echo "Backing up PostgreSQL database..."
 	@docker exec pulsedata_db pg_dump -U pulsedata_user -d pulsedata > backup_$(shell date +%Y%m%d_%H%M%S).sql
-	@echo "✓ Database backed up"
+	@echo "Database backed up"
 
 restore-db:
 	@if [ -z "$(FILE)" ]; then \
@@ -122,4 +122,4 @@ restore-db:
 	fi
 	@echo "Restoring database from $(FILE)..."
 	@cat $(FILE) | docker exec -i pulsedata_db psql -U pulsedata_user -d pulsedata
-	@echo "✓ Database restored"
+	@echo "Database restored"

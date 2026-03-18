@@ -69,7 +69,7 @@ docker-compose down -v
 
 1. Open `http://localhost:8080`
 2. Login with credentials above
-3. Right-click "Servers" → "Create" → "Server"
+3. Right-click "Servers" -> "Create" -> "Server"
 4. **General Tab**:
    - Name: `PulseData`
 5. **Connection Tab**:
@@ -78,7 +78,7 @@ docker-compose down -v
    - Maintenance database: `pulsedata`
    - Username: `pulsedata_user`
    - Password: `pulsedata_pass`
-   - Save password: ✓
+   - Save password: yes
 
 ### PulseData API
 

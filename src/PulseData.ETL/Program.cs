@@ -5,7 +5,7 @@ using PulseData.ETL.Pipeline;
 using PulseData.Infrastructure.Data;
 
 // ---------------------------------------------------------------------------
-// PulseData ETL — Entry Point
+// PulseData ETL - Entry Point
 // ---------------------------------------------------------------------------
 // Usage:
 //   dotnet run                          (uses default sample file)
