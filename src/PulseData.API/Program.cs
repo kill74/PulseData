@@ -1,5 +1,6 @@
 using PulseData.API.Configuration;
 using PulseData.API.Middleware;
+using PulseData.API.Services;
 using PulseData.Core.Interfaces;
 using PulseData.Infrastructure.Data;
 using PulseData.Infrastructure.Repositories;
@@ -77,6 +78,9 @@ builder.Services.AddScoped<IAnalyticsRepository, AnalyticsRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+// Services
+builder.Services.AddScoped<IHealthCheckService, HealthCheckService>();
 
 // CORS — configuration-driven, defaults to secure setup
 var corsOptions = builder.Configuration.GetSection(CorsOptions.SectionName).Get<CorsOptions>() ?? new();
