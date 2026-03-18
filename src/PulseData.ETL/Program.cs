@@ -1,4 +1,6 @@
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using PulseData.ETL.Pipeline;
 using PulseData.Infrastructure.Data;
 
@@ -13,40 +15,57 @@ using PulseData.Infrastructure.Data;
 var config = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false)
+    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development"}.json", optional: true)
     .AddEnvironmentVariables()
     .Build();
 
-var dbFactory = new DbConnectionFactory(config);
-var pipeline  = new OrderEtlPipeline(dbFactory);
+// Set up dependency injection
+var services = new ServiceCollection();
+services.AddSingleton<IConfiguration>(config);
+services.AddSingleton<DbConnectionFactory>();
+services.AddSingleton<OrderEtlPipeline>();
+services.AddLogging(builder =>
+{
+    builder.ClearProviders();
+    builder.AddConsole();
+    builder.SetMinimumLevel(LogLevel.Information);
+});
+
+var serviceProvider = services.BuildServiceProvider();
+
+// Get pipeline and logger
+var pipeline = serviceProvider.GetRequiredService<OrderEtlPipeline>();
+var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
 
 var csvPath = args.Length > 0
     ? args[0]
     : Path.Combine(AppContext.BaseDirectory, "sample_orders.csv");
 
-Console.WriteLine("╔══════════════════════════════════╗");
-Console.WriteLine("║     PulseData ETL Pipeline       ║");
-Console.WriteLine("╚══════════════════════════════════╝");
-Console.WriteLine();
+logger.LogInformation("PulseData ETL Pipeline");
+logger.LogInformation("CSV Path: {CsvPath}", csvPath);
+logger.LogInformation("Environment: {Environment}", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development");
+logger.LogInformation("Starting pipeline...");
+logger.LogInformation("");
 
 var result = await pipeline.RunAsync(csvPath);
 
-Console.WriteLine();
-Console.WriteLine("─── Summary ─────────────────────────");
-Console.WriteLine($"  Records read   : {result.RecordsRead}");
-Console.WriteLine($"  Records loaded : {result.RecordsLoaded}");
-Console.WriteLine($"  Records failed : {Math.Max(result.RecordsFailed, 0)}");
-Console.WriteLine($"  Duration       : {result.Duration.TotalSeconds:F2}s");
+logger.LogInformation("");
+logger.LogInformation("Summary:");
+logger.LogInformation("  Records read   : {RecordsRead}", result.RecordsRead);
+logger.LogInformation("  Records loaded : {RecordsLoaded}", result.RecordsLoaded);
+logger.LogInformation("  Records failed : {RecordsFailed}", Math.Max(result.RecordsFailed, 0));
+logger.LogInformation("  Duration       : {Duration:F2}s", result.Duration.TotalSeconds);
 
 if (result.Errors.Count > 0)
 {
-    Console.WriteLine();
-    Console.WriteLine("─── Errors ──────────────────────────");
+    logger.LogWarning("");
+    logger.LogWarning("Errors (first 10):");
     foreach (var error in result.Errors.Take(10))
-        Console.WriteLine($"  ! {error}");
+        logger.LogWarning("  {Error}", error);
 
     if (result.Errors.Count > 10)
-        Console.WriteLine($"  ... and {result.Errors.Count - 10} more. Check etl_run_log table.");
+        logger.LogWarning("  ... and {RemainingErrors} more. Check etl_run_log table.", result.Errors.Count - 10);
 }
 
-Console.WriteLine();
-return result.RecordsFailed > 0 ? 1 : 0;
+logger.LogInformation("");
+Environment.Exit(result.RecordsFailed > 0 ? 1 : 0);
