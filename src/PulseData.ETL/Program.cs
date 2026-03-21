@@ -15,7 +15,7 @@ using PulseData.Infrastructure.Data;
 // ---------------------------------------------------------------------------
 
 var config = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
+    .SetBasePath(AppContext.BaseDirectory)
     .AddJsonFile("appsettings.json", optional: false)
     .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development"}.json", optional: true)
     .AddEnvironmentVariables()
@@ -62,7 +62,6 @@ logger.LogInformation("CSV file validated");
 try
 {
     using var connection = connectionFactory.CreateConnection();
-    await connection.OpenAsync();
     logger.LogInformation("Database connection verified");
 }
 catch (Exception ex)

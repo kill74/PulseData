@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using PulseData.API.Models;
 using PulseData.API.Services;
 
@@ -26,8 +27,8 @@ public class HealthController : ControllerBase
   /// Used by load balancers and orchestrators (Kubernetes, Docker Swarm) to determine service readiness.
   /// </summary>
   [HttpGet("live")]
-  [ProduceResponseType(StatusCodes.Status200OK)]
-  [ProduceResponseType(StatusCodes.Status503ServiceUnavailable)]
+[ProducesResponseType(StatusCodes.Status200OK)]
+[ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
   public async Task<ActionResult<HealthCheckResponse>> GetLiveness()
   {
     var (isHealthy, services) = await _healthCheck.CheckHealthAsync();
@@ -47,8 +48,8 @@ public class HealthController : ControllerBase
   /// Returns 200 if ready, 503 if not ready.
   /// </summary>
   [HttpGet("ready")]
-  [ProduceResponseType(StatusCodes.Status200OK)]
-  [ProduceResponseType(StatusCodes.Status503ServiceUnavailable)]
+[ProducesResponseType(StatusCodes.Status200OK)]
+[ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
   public async Task<ActionResult<HealthCheckResponse>> GetReadiness()
   {
     var (isHealthy, services) = await _healthCheck.CheckHealthAsync();

@@ -40,8 +40,8 @@ public class HealthCheckService : IHealthCheckService
     }
     catch (Exception ex)
     {
-      _logger.LogWarning("Database health check failed: {Error}", ex.Message);
-      services["Database"] = ServiceHealth.Unhealthy(ex.Message);
+      _logger.LogWarning(ex, "Database health check failed: {Error}", ex.Message);
+      services["Database"] = ServiceHealth.Unhealthy("Database connectivity check failed");
       isHealthy = false;
     }
 
