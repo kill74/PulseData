@@ -177,3 +177,7 @@ if (!string.IsNullOrEmpty(builder.Configuration.GetSection(JwtOptions.SectionNam
 app.MapControllers();
 
 app.Run();
+
+public partial class Program
+{
+}

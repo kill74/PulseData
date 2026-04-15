@@ -77,16 +77,17 @@ public sealed class HealthCheckService : IHealthCheckService
 
   public async Task<HealthCheckResult> CheckReadinessAsync(CancellationToken cancellationToken = default)
   {
+    cancellationToken.ThrowIfCancellationRequested();
+
     if (TryGetCachedReadiness(out var cachedResult))
       return cachedResult;
 
-    var timeoutMs = _readinessTimeoutMs;
-    using var timeoutCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMs));
+    using var timeoutCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(_readinessTimeoutMs));
     using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutCts.Token);
 
     var services = new Dictionary<string, ServiceHealth>(StringComparer.Ordinal);
 
-    var (databaseHealthy, databaseStatus) = await CheckDatabaseAsync(linkedCts.Token, cancellationToken, timeoutMs);
+    var (databaseHealthy, databaseStatus) = await CheckDatabaseAsync(linkedCts.Token, cancellationToken);
     services[DatabaseDependencyName] = databaseStatus;
 
     var result = new HealthCheckResult(databaseHealthy, ToReadOnly(services));
@@ -97,8 +98,7 @@ public sealed class HealthCheckService : IHealthCheckService
 
   private async Task<(bool IsHealthy, ServiceHealth Service)> CheckDatabaseAsync(
       CancellationToken healthCheckToken,
-      CancellationToken requestCancellationToken,
-      int timeoutMs)
+      CancellationToken requestCancellationToken)
   {
     var stopwatch = Stopwatch.StartNew();
 
@@ -121,7 +121,7 @@ public sealed class HealthCheckService : IHealthCheckService
 
       stopwatch.Stop();
       var responseTimeMs = (int)stopwatch.ElapsedMilliseconds;
-      var details = $"Database connectivity check timed out after {timeoutMs}ms";
+      var details = $"Database connectivity check timed out after {_readinessTimeoutMs}ms";
       var error = _includeErrorDetails ? ex.Message : null;
 
       _logger.LogWarning(ex,

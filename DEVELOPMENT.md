@@ -468,16 +468,43 @@ dotnet run < test_data.csv
 
 ## Testing
 
-### Unit Testing (Not Yet Implemented)
+### Unit Testing
 
-Create test projects following this structure:
+Current test projects:
 
 ```
 tests/
-├── PulseData.Core.Tests/
-├── PulseData.Infrastructure.Tests/
 └── PulseData.API.Tests/
 ```
+
+Run API health endpoint tests:
+
+```bash
+dotnet test ./tests/PulseData.API.Tests/PulseData.API.Tests.csproj
+```
+
+Current coverage in `PulseData.API.Tests`:
+
+- Liveness returns 200 with healthy payload
+- Readiness returns 200 when dependencies are healthy
+- Readiness returns 408 when dependency check times out
+- Readiness returns 503 when dependency is unavailable
+
+Integration coverage in `PulseData.API.Tests` (WebApplicationFactory):
+
+- End-to-end validation of `/api/health/live` status and payload
+- End-to-end validation of `/api/health/ready` timeout path (`408`)
+- End-to-end validation of `/api/health/ready` dependency failure path (`503`)
+
+### CI Validation
+
+GitHub Actions workflow: `.github/workflows/ci.yml`
+
+The CI pipeline validates:
+
+- API restore and build
+- Test project restore and build
+- Health endpoint unit test execution on every push/PR to `main`
 
 ### Manual Testing Checklist
 
