@@ -85,7 +85,8 @@ docker-compose down -v
 - **Container**: `pulsedata_api`
 - **URL**: `http://localhost:8000`
 - **API Documentation**: `http://localhost:8000/swagger/index.html` (if Swagger is enabled)
-- **Health Check**: `http://localhost:8000/api/health/live`
+- **Liveness Check**: `http://localhost:8000/api/health/live`
+- **Readiness Check**: `http://localhost:8000/api/health/ready`
 
 **Note**: Requires database to be running and healthy before starting.
 

@@ -22,11 +22,17 @@ builder.Configuration
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddMemoryCache();
 
 // Configuration Options (bind from appsettings)
 builder.Services.Configure<CorsOptions>(builder.Configuration.GetSection(CorsOptions.SectionName));
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionName));
 builder.Services.Configure<LoggingOptions>(builder.Configuration.GetSection(LoggingOptions.SectionName));
+builder.Services
+    .AddOptions<HealthCheckOptions>()
+    .Bind(builder.Configuration.GetSection(HealthCheckOptions.SectionName))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
 // Swagger/OpenAPI with JWT support
 builder.Services.AddSwaggerGen(options =>

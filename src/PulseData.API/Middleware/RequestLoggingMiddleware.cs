@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Text;
 
 namespace PulseData.API.Middleware;
 
@@ -20,10 +19,13 @@ public class RequestLoggingMiddleware
 
   public async Task InvokeAsync(HttpContext context)
   {
+    if (context.Request.Path.StartsWithSegments("/api/health", StringComparison.OrdinalIgnoreCase))
+    {
+      await _next(context);
+      return;
+    }
+
     var stopwatch = Stopwatch.StartNew();
-    var originalBodyStream = context.Response.Body;
-    var responseBody = new MemoryStream();
-    context.Response.Body = responseBody;
 
     try
     {
@@ -50,11 +52,6 @@ public class RequestLoggingMiddleware
           stopwatch.ElapsedMilliseconds,
           ex.Message);
       throw;
-    }
-    finally
-    {
-      await responseBody.CopyToAsync(originalBodyStream);
-      context.Response.Body = originalBodyStream;
     }
   }
 }

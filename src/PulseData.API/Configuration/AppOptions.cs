@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace PulseData.API.Configuration;
 
 /// <summary>
@@ -75,4 +77,30 @@ public class LoggingOptions
 
   /// <summary>Name of the logs table for PostgreSQL sink</summary>
   public string? TableName { get; set; } = "application_logs";
+}
+
+/// <summary>
+/// Health endpoint behavior configuration.
+/// </summary>
+public class HealthCheckOptions
+{
+  public static readonly string SectionName = "HealthCheck";
+
+  /// <summary>
+  /// Maximum execution time for readiness dependency checks in milliseconds.
+  /// </summary>
+  [Range(100, 120000)]
+  public int ReadinessTimeoutMs { get; set; } = 5000;
+
+  /// <summary>
+  /// Short cache window for readiness results to reduce probe load on dependencies.
+  /// Set to 0 to disable caching.
+  /// </summary>
+  [Range(0, 60000)]
+  public int ReadinessCacheTtlMs { get; set; } = 5000;
+
+  /// <summary>
+  /// Whether to expose low-level dependency error details in health responses.
+  /// </summary>
+  public bool IncludeErrorDetails { get; set; } = false;
 }

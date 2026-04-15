@@ -235,8 +235,14 @@ dotnet run
 
 | Method | Endpoint            | Description                                  |
 | ------ | ------------------- | -------------------------------------------- |
-| GET    | `/api/health/live`  | Liveness check (is API running?)             |
-| GET    | `/api/health/ready` | Readiness check (is API ready for requests?) |
+| GET    | `/api/health/live`  | Liveness check (process is running)          |
+| GET    | `/api/health/ready` | Readiness check (dependencies are available) |
+
+Readiness returns:
+
+- `200` when dependencies are healthy
+- `408` when a dependency check times out
+- `503` when a required dependency is unavailable
 
 ### Analytics
 
@@ -334,6 +340,12 @@ curl http://localhost:5001/api/health/live
 # Check if API is ready to serve requests
 curl http://localhost:5001/api/health/ready
 ```
+
+Probe behavior details:
+
+- `/api/health/live` validates process liveness only and does not require database access
+- `/api/health/ready` validates dependency readiness (currently PostgreSQL)
+- Readiness checks are timeout-bounded and short-lived cached to reduce probe pressure on the database
 
 ### Structured Logging
 
